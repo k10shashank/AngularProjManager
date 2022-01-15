@@ -31,7 +31,7 @@ export class TasksComponent implements OnInit {
   taskList: TaskModel[] = [];
 
   gridColDefs: ColDef[] = [
-    { headerName: 'Project ID', field: 'ID_TASK' },
+    { headerName: 'Task ID', field: 'ID_TASK' },
     { headerName: 'Details', field: 'DETAILS' },
     { headerName: 'Status', field: 'STATUS' },
     { headerName: 'Created On', field: 'CREATED_ON', cellRenderer(params) { return dateCellRenderer(new Date(params.value)); } },
