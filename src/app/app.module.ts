@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { UserEntryComponent } from './components/user-entry/user-entry.component';
 import { TaskEntryComponent } from './components/task-entry/task-entry.component';
 import { ProjectEntryComponent } from './components/project-entry/project-entry.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ProjectEntryComponent } from './components/project-entry/project-entry.
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
