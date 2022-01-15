@@ -1,5 +1,7 @@
 import { ProjectModel } from './../../models/project.model';
 import { Component, OnInit } from '@angular/core';
+import { ColDef } from 'ag-grid-community';
+import { dateCellRenderer } from '../../shared/app-functions';
 
 const cnstProjectDetail = 'This is a Test Project';
 const cnstProjectDate = '17-NOV-2021';
@@ -12,7 +14,12 @@ const cnstProjectDate = '17-NOV-2021';
 export class ProjectsComponent implements OnInit {
   projectList: ProjectModel[] = [];
 
-  constructor() { }
+  gridColDefs: ColDef[] = [
+    { headerName: 'Project ID', field: 'ID_PROJECT' },
+    { headerName: 'Name', field: 'NAME' },
+    { headerName: 'Details', field: 'DETAILS' },
+    { headerName: 'Created On', field: 'CREATED_ON', cellRenderer(params) { return dateCellRenderer(new Date(params.value)); } }
+  ];
 
   ngOnInit(): void {
     this.projectList = [

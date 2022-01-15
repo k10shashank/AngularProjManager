@@ -1,1 +1,6 @@
-<p>users works!</p>
+<app-page-title title="Users"></app-page-title>
+
+<div>
+    <ag-grid-angular class="ag-theme-alpine" [style.width.px]="850" [style.height.px]="300" [rowData]="userList"
+        [columnDefs]="gridColDefs"></ag-grid-angular>
+</div>

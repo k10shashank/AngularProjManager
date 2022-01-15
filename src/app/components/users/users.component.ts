@@ -1,5 +1,6 @@
 import { UserModel } from './../../models/user.model';
 import { Component, OnInit } from '@angular/core';
+import { ColDef } from 'ag-grid-community';
 
 @Component({
   selector: 'app-users',
@@ -9,7 +10,12 @@ import { Component, OnInit } from '@angular/core';
 export class UsersComponent implements OnInit {
   userList: UserModel[] = [];
 
-  constructor() { }
+  gridColDefs: ColDef[] = [
+    { headerName: 'User ID', field: 'ID_USER' },
+    { headerName: 'Email', field: 'EMAIL' },
+    { headerName: 'First Name', field: 'FIRST_NAME' },
+    { headerName: 'Last Name', field: 'LAST_NAME' }
+  ];
 
   ngOnInit(): void {
     this.userList = [

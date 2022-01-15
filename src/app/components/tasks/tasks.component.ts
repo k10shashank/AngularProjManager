@@ -2,6 +2,8 @@ import { UserModel } from './../../models/user.model';
 import { ProjectModel } from './../../models/project.model';
 import { TaskModel } from './../../models/task.model';
 import { Component, OnInit } from '@angular/core';
+import { ColDef } from 'ag-grid-community';
+import { dateCellRenderer } from '../../shared/app-functions';
 
 const cnstTaskDetail = 'This is a Test Task';
 const cnstTaskDate = '17-NOV-2021';
@@ -28,7 +30,14 @@ export class TasksComponent implements OnInit {
   ];
   taskList: TaskModel[] = [];
 
-  constructor() { }
+  gridColDefs: ColDef[] = [
+    { headerName: 'Project ID', field: 'ID_TASK' },
+    { headerName: 'Details', field: 'DETAILS' },
+    { headerName: 'Status', field: 'STATUS' },
+    { headerName: 'Created On', field: 'CREATED_ON', cellRenderer(params) { return dateCellRenderer(new Date(params.value)); } },
+    { headerName: 'Project', field: 'PROJECT.NAME' },
+    { headerName: 'User', cellRenderer(params) { return `${params.data.USER.FIRST_NAME} ${params.data.USER.LAST_NAME}`; } }
+  ];
 
   ngOnInit(): void {
     this.taskList = [

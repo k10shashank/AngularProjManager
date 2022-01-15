@@ -1,1 +1,6 @@
-<p>tasks works!</p>
+<app-page-title title="Tasks"></app-page-title>
+
+<div>
+    <ag-grid-angular class="ag-theme-alpine" [style.width.px]="1300" [style.height.px]="300" [rowData]="taskList"
+        [columnDefs]="gridColDefs"></ag-grid-angular>
+</div>
