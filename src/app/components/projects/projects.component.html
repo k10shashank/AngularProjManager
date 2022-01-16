@@ -1,7 +1,9 @@
 <app-page-title title="Projects"></app-page-title>
-<button class="btn btn-primary">New Project</button>
+<button class="btn btn-primary" (click)="openProjectEntryDialog()">New Project</button>
 <br /><br />
 <div>
-    <ag-grid-angular class="ag-theme-alpine" [style.width.px]="850" [style.height.px]="300" [rowData]="projectList"
+    <ag-grid-angular class="ag-theme-alpine" [style.width.px]="1000" [style.height.px]="300" [rowData]="projectList"
         [columnDefs]="gridColDefs"></ag-grid-angular>
 </div>
+
+<app-project-entry></app-project-entry>

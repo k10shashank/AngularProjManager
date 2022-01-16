@@ -1,1 +1,34 @@
-<p>project-entry works!</p>
+<div *ngIf="showComponentFlag" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <legend>
+                    <strong>{{legend}} Project</strong>
+                </legend>
+            </div>
+            <div class="modal-body">
+                <form #entryForm="ngForm" (ngSubmit)="onSubmit()">
+                    <div class="form row">
+                        <div class="form-group col-md-6">
+                            <label for="name"><strong>Name</strong></label>
+                            <input type="text" id="name" class="form-control" name="name" placeholder="Name"
+                                [(ngModel)]="formData.NAME" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="details"><strong>Details</strong></label>
+                            <input type="text" id="details" class="form-control" name="details" placeholder="Details"
+                                [(ngModel)]="formData.DETAILS" required>
+                        </div>
+                        <div class="text-right">
+                            <br />
+                            <span class="clsError">{{errorMsg}}</span><br /><br />
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            &nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-secondary" (click)="onClose()">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

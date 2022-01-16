@@ -1,1 +1,39 @@
-<p>user-entry works!</p>
+<div *ngIf="showComponentFlag" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <legend>
+                    <strong>{{legend}} User</strong>
+                </legend>
+            </div>
+            <div class="modal-body">
+                <form #entryForm="ngForm" (ngSubmit)="onSubmit()">
+                    <div class="form row">
+                        <div class="form-group col-md-6">
+                            <label for="email"><strong>Email</strong></label>
+                            <input type="email" id="email" class="form-control" name="email" placeholder="Email"
+                                [(ngModel)]="formData.EMAIL" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="firstName"><strong>First Name</strong></label>
+                            <input type="text" id="firstName" class="form-control" name="firstName"
+                                placeholder="First Name" [(ngModel)]="formData.FIRST_NAME" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="lastName"><strong>Last Name</strong></label>
+                            <input type="text" id="lastName" class="form-control" name="lastName"
+                                placeholder="Last Name" [(ngModel)]="formData.LAST_NAME" required>
+                        </div>
+                        <div class="text-right">
+                            <br />
+                            <span class="clsError">{{errorMsg}}</span><br /><br />
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            &nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-secondary" (click)="onClose()">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

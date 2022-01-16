@@ -1,9 +1,11 @@
+import { PopupHandler } from './../../shared/popup-handler';
 import { UserModel } from './../../models/user.model';
 import { ProjectModel } from './../../models/project.model';
 import { TaskModel } from './../../models/task.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
-import { dateCellRenderer } from '../../shared/app-functions';
+import { dateCellRenderer } from '../../shared/cell-renderer-functions';
+import { stringifyProjectModel, stringifyUserModel } from '../../shared/app-functions';
 
 const cnstTaskDetail = 'This is a Test Task';
 const cnstTaskDate = '17-NOV-2021';
@@ -31,13 +33,18 @@ export class TasksComponent implements OnInit {
   taskList: TaskModel[] = [];
 
   gridColDefs: ColDef[] = [
-    { headerName: 'Task ID', field: 'ID_TASK' },
-    { headerName: 'Details', field: 'DETAILS' },
-    { headerName: 'Status', field: 'STATUS' },
-    { headerName: 'Created On', field: 'CREATED_ON', cellRenderer(params) { return dateCellRenderer(new Date(params.value)); } },
-    { headerName: 'Project', field: 'PROJECT.NAME' },
-    { headerName: 'User', cellRenderer(params) { return `${params.data.USER.FIRST_NAME} ${params.data.USER.LAST_NAME}`; } }
+    { headerName: 'Task ID', field: 'ID_TASK', width: 100 },
+    { headerName: 'Details', field: 'DETAILS', width: 150 },
+    { headerName: 'Status', field: 'STATUS', width: 150 },
+    { headerName: 'Created On', field: 'CREATED_ON', cellRenderer: params => dateCellRenderer(new Date(params.value)), width: 200 },
+    { headerName: 'Project', cellRenderer: params => stringifyProjectModel(params.data.PROJECT), width: 400 },
+    { headerName: 'User', cellRenderer: params => stringifyUserModel(params.data.USER), width: 300 },
+    { cellRenderer: () => `<button class="btn btn-primary">Edit Task</button>`, onCellClicked: params => this.popupHandler.openTaskEntry(params.data), width: 100 },
+    { cellRenderer: () => `<button class="btn btn-primary">Delete Task</button>`, width: 150 }
   ];
+
+  constructor(private readonly cd: ChangeDetectorRef,
+    private readonly popupHandler: PopupHandler) { }
 
   ngOnInit(): void {
     this.taskList = [
@@ -66,6 +73,16 @@ export class TasksComponent implements OnInit {
         PROJECT: this.projectList[3], USER: this.userList[1]
       }
     ];
+  }
+
+  openTaskEntryDialog() {
+    const maxTaskId = Math.max(...this.taskList.map(x => x.ID_TASK));
+    const addTask: TaskModel = {
+      ID_TASK: maxTaskId + 1, DETAILS: '', CREATED_ON: new Date(), STATUS: 'New', ID_PROJECT: 0, ID_USER: 0,
+      PROJECT: { ID_PROJECT: 0, NAME: '', DETAILS: '', CREATED_ON: new Date() }, USER: { ID_USER: 0, EMAIL: '', FIRST_NAME: '', LAST_NAME: '' }
+    };
+    this.popupHandler.openTaskEntry(addTask);
+    this.cd.markForCheck();
   }
 
 }

@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -18,23 +19,14 @@ import { PageTitleComponent } from './components/page-title/page-title.component
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HeaderComponent,
-    UsersComponent,
-    ProjectsComponent,
-    TasksComponent,
-    LeftMenuComponent,
-    UserEntryComponent,
-    TaskEntryComponent,
-    ProjectEntryComponent,
+    AppComponent, HeaderComponent, UsersComponent, ProjectsComponent, TasksComponent, LeftMenuComponent, UserEntryComponent, TaskEntryComponent, ProjectEntryComponent,
     PageTitleComponent
   ],
   imports: [
-    BrowserModule,
-    FormsModule,
-    AppRoutingModule,
-    NgbModule,
-    AgGridModule.withComponents()
+    BrowserModule, FormsModule, AppRoutingModule, NgbModule, AgGridModule.withComponents(), BrowserAnimationsModule
+  ],
+  entryComponents: [
+    UserEntryComponent
   ],
   providers: [],
   bootstrap: [AppComponent],
