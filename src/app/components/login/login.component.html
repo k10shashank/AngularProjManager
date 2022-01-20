@@ -1,0 +1,24 @@
+<div class="clsBody">
+    <app-page-title title="Login"></app-page-title>
+    <div>
+        <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+            <div class="form row">
+                <div class="col-md-6">
+                    <label for="email"><strong>Email</strong></label>
+                    <input type="email" id="email" class="form-control" name="email" placeholder="Email"
+                        [(ngModel)]="email" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="password"><strong>Password</strong></label>
+                    <input type="password" id="password" class="form-control" name="password" placeholder="Password"
+                        [(ngModel)]="password" required>
+                </div>
+                <div class="text-right">
+                    <br />
+                    <span class="clsError">{{errorMsg}}</span><br /><br />
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

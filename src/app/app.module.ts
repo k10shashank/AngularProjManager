@@ -16,17 +16,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AgGridModule } from 'ag-grid-angular';
 import { FormsModule } from '@angular/forms';
 import { PageTitleComponent } from './components/page-title/page-title.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent, HeaderComponent, UsersComponent, ProjectsComponent, TasksComponent, LeftMenuComponent, UserEntryComponent, TaskEntryComponent, ProjectEntryComponent,
-    PageTitleComponent
+    PageTitleComponent, LoginComponent
   ],
   imports: [
     BrowserModule, FormsModule, AppRoutingModule, NgbModule, AgGridModule.withComponents(), BrowserAnimationsModule
   ],
   entryComponents: [
-    UserEntryComponent
+    UserEntryComponent, ProjectEntryComponent, TaskEntryComponent, LoginComponent
   ],
   providers: [],
   bootstrap: [AppComponent],

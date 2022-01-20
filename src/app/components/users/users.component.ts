@@ -16,7 +16,7 @@ export class UsersComponent implements OnInit {
     { headerName: 'Email', field: 'EMAIL', width: 200 },
     { headerName: 'First Name', field: 'FIRST_NAME', width: 150 },
     { headerName: 'Last Name', field: 'LAST_NAME', width: 150 },
-    { cellRenderer: () => `<button class="btn btn-primary">Edit User</button>`, onCellClicked: params => this.popupHandler.openUserEntry(params.data), width: 100 },
+    { cellRenderer: () => `<button class="btn btn-primary">Edit User</button>`, onCellClicked: params => this.popupHandler.openUserEntry(params.data), width: 150 },
     { cellRenderer: () => `<button class="btn btn-primary">Delete User</button>`, width: 150 }
   ];
 

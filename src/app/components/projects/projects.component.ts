@@ -20,7 +20,7 @@ export class ProjectsComponent implements OnInit {
     { headerName: 'Name', field: 'NAME', width: 150 },
     { headerName: 'Details', field: 'DETAILS', width: 200 },
     { headerName: 'Created On', field: 'CREATED_ON', cellRenderer: params => dateCellRenderer(new Date(params.value)), width: 200 },
-    { cellRenderer: () => `<button class="btn btn-primary">Edit Project</button>`, onCellClicked: params => this.popupHandler.openProjectEntry(params.data), width: 100 },
+    { cellRenderer: () => `<button class="btn btn-primary">Edit Project</button>`, onCellClicked: params => this.popupHandler.openProjectEntry(params.data), width: 150 },
     { cellRenderer: () => `<button class="btn btn-primary">Delete Project</button>`, width: 150 }
   ];
 

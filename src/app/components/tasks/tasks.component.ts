@@ -39,7 +39,7 @@ export class TasksComponent implements OnInit {
     { headerName: 'Created On', field: 'CREATED_ON', cellRenderer: params => dateCellRenderer(new Date(params.value)), width: 200 },
     { headerName: 'Project', cellRenderer: params => stringifyProjectModel(params.data.PROJECT), width: 400 },
     { headerName: 'User', cellRenderer: params => stringifyUserModel(params.data.USER), width: 300 },
-    { cellRenderer: () => `<button class="btn btn-primary">Edit Task</button>`, onCellClicked: params => this.popupHandler.openTaskEntry(params.data), width: 100 },
+    { cellRenderer: () => `<button class="btn btn-primary">Edit Task</button>`, onCellClicked: params => this.popupHandler.openTaskEntry(params.data), width: 150 },
     { cellRenderer: () => `<button class="btn btn-primary">Delete Task</button>`, width: 150 }
   ];
 

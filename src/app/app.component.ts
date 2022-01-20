@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +7,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'AngularProjManager';
+  loginFlag = true;
+
+  constructor(private readonly cd: ChangeDetectorRef) { }
+
+  onLogin(loggedIn: boolean) {
+    this.loginFlag = !loggedIn;
+    this.cd.markForCheck();
+  }
+
+  onLogOut() {
+    this.loginFlag = true;
+    this.cd.markForCheck();
+  }
 }
