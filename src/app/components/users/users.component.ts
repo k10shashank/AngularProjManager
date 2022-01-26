@@ -1,3 +1,4 @@
+import { UserService } from './../../services/user.service';
 import { PopupHandler } from './../../shared/popup-handler';
 import { UserModel } from './../../models/user.model';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -16,20 +17,30 @@ export class UsersComponent implements OnInit {
     { headerName: 'Email', field: 'EMAIL', width: 200 },
     { headerName: 'First Name', field: 'FIRST_NAME', width: 150 },
     { headerName: 'Last Name', field: 'LAST_NAME', width: 150 },
-    { cellRenderer: () => `<button class="btn btn-primary">Edit User</button>`, onCellClicked: params => this.popupHandler.openUserEntry(params.data), width: 150 },
-    { cellRenderer: () => `<button class="btn btn-primary">Delete User</button>`, width: 150 }
+    { width: 150, cellRenderer: () => `<button class="btn btn-primary">Edit User</button>`, onCellClicked: params => this.popupHandler.openUserEntry(params.data) },
+    {
+      width: 150, cellRenderer: () => `<button class="btn btn-primary">Delete User</button>`,
+      onCellClicked: params => this.userService.delete(params.data.ID_USER).subscribe({
+        next: () => this.getAll()
+      })
+    }
   ];
 
   constructor(private readonly cd: ChangeDetectorRef,
-    private readonly popupHandler: PopupHandler) { }
+    private readonly popupHandler: PopupHandler,
+    private readonly userService: UserService) { }
 
   ngOnInit(): void {
-    this.userList = [
-      { ID_USER: 1, EMAIL: 'john.doe@test.com', FIRST_NAME: 'John', LAST_NAME: 'Doe' },
-      { ID_USER: 2, EMAIL: 'john.skeet@test.com', FIRST_NAME: 'John', LAST_NAME: 'Skeet' },
-      { ID_USER: 3, EMAIL: 'mark.seeman@test.com', FIRST_NAME: 'Mark', LAST_NAME: 'Seeman' },
-      { ID_USER: 4, EMAIL: 'bob.martin@test.com', FIRST_NAME: 'Bob', LAST_NAME: 'Martin' }
-    ];
+    this.getAll();
+  }
+
+  getAll() {
+    this.userService.getAll().subscribe({
+      next: data => {
+        this.userList = data;
+        this.cd.markForCheck();
+      }
+    });
   }
 
   openUserEntryDialog() {
@@ -37,6 +48,12 @@ export class UsersComponent implements OnInit {
     const addUser: UserModel = { ID_USER: maxUserId + 1, EMAIL: '', FIRST_NAME: '', LAST_NAME: '' };
     this.popupHandler.openUserEntry(addUser);
     this.cd.markForCheck();
+  }
+
+  onDialogClose(successFlag: boolean) {
+    if (successFlag) {
+      this.getAll();
+    }
   }
 
 }

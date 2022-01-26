@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -24,7 +25,7 @@ import { LoginComponent } from './components/login/login.component';
     PageTitleComponent, LoginComponent
   ],
   imports: [
-    BrowserModule, FormsModule, AppRoutingModule, NgbModule, AgGridModule.withComponents(), BrowserAnimationsModule
+    BrowserModule, FormsModule, AppRoutingModule, NgbModule, AgGridModule.withComponents(), BrowserAnimationsModule, HttpClientModule
   ],
   entryComponents: [
     UserEntryComponent, ProjectEntryComponent, TaskEntryComponent, LoginComponent

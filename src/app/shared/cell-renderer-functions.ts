@@ -1,3 +1,5 @@
+import { stringifyDate } from './app-functions';
+
 export function dateCellRenderer(dt: Date) {
-    return dt.toDateString();
+    return stringifyDate(dt);
 }

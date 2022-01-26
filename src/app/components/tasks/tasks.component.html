@@ -6,4 +6,4 @@
         [columnDefs]="gridColDefs"></ag-grid-angular>
 </div>
 
-<app-task-entry [projectList]="projectList" [userList]="userList"></app-task-entry>
+<app-task-entry [projectList]="projectList" [userList]="userList" (onClose)="onDialogClose($event)"></app-task-entry>

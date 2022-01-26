@@ -7,12 +7,18 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 })
 export class AppComponent {
   title = 'AngularProjManager';
+  user!: string;
   loginFlag = true;
 
   constructor(private readonly cd: ChangeDetectorRef) { }
 
-  onLogin(loggedIn: boolean) {
-    this.loginFlag = !loggedIn;
+  onLogin(username: string) {
+    if (username === '') {
+      this.loginFlag = true;
+    } else {
+      this.user = username;
+      this.loginFlag = false;
+    }
     this.cd.markForCheck();
   }
 

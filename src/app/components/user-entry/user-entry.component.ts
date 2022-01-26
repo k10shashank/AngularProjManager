@@ -1,6 +1,9 @@
+import { ErrorModel } from './../../models/error.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from './../../services/user.service';
 import { UserModel } from './../../models/user.model';
 import { PopupHandler } from './../../shared/popup-handler';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -10,13 +13,15 @@ import { NgForm } from '@angular/forms';
 })
 export class UserEntryComponent implements OnInit {
   @ViewChild('entryForm') entryForm!: NgForm;
+  @Output() onClose = new EventEmitter();
   showComponentFlag!: boolean;
   formData: UserModel = { ID_USER: 0, EMAIL: '', FIRST_NAME: '', LAST_NAME: '' };
   legend!: string;
   errorMsg!: string;
 
   constructor(private readonly cd: ChangeDetectorRef,
-    private readonly popupHandler: PopupHandler) { }
+    private readonly popupHandler: PopupHandler,
+    private readonly userService: UserService) { }
 
   ngOnInit(): void {
     this.popupHandler.userEntry().subscribe((user: UserModel) => {
@@ -39,18 +44,45 @@ export class UserEntryComponent implements OnInit {
     } else if (this.formData.LAST_NAME === '') {
       this.errorMsg = 'Please enter Last Name';
     } else {
-      this.onClose();
+      switch (this.legend) {
+        case 'Add':
+          this.userService.add(this.formData).subscribe({
+            next: () => this.onHttpSuccess(),
+            error: (httpError: HttpErrorResponse) => this.onHttpError(httpError)
+          });
+          break;
+        case 'Edit':
+          this.userService.update(this.formData).subscribe({
+            next: () => this.onHttpSuccess(),
+            error: (httpError: HttpErrorResponse) => this.onHttpError(httpError)
+          });
+          break;
+        default:
+          break;
+      }
     }
     this.cd.markForCheck();
   }
 
-  onClose() {
+  onCloseDialog() {
     this.formData = { ID_USER: 0, EMAIL: '', FIRST_NAME: '', LAST_NAME: '' };
     this.legend = '';
     this.errorMsg = '';
     this.entryForm.reset();
     this.showComponentFlag = false;
     this.cd.markForCheck();
+  }
+
+  onHttpSuccess() {
+    this.onCloseDialog();
+    this.onClose.emit(true);
+  }
+
+  onHttpError(httpError: HttpErrorResponse) {
+    const errorModel = httpError.error as ErrorModel;
+    this.errorMsg = errorModel.ERROR_MSG;
+    this.onCloseDialog();
+    this.onClose.emit(false);
   }
 
 }

@@ -1,7 +1,10 @@
+import { ErrorModel } from './../../models/error.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ProjectService } from './../../services/project.service';
 import { PopupHandler } from './../../shared/popup-handler';
 import { NgForm } from '@angular/forms';
 import { ProjectModel } from './../../models/project.model';
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-project-entry',
@@ -10,13 +13,15 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 })
 export class ProjectEntryComponent implements OnInit {
   @ViewChild('entryForm') entryForm!: NgForm;
+  @Output() onClose = new EventEmitter();
   showComponentFlag!: boolean;
   formData: ProjectModel = { ID_PROJECT: 0, NAME: '', DETAILS: '', CREATED_ON: new Date() };
   legend!: string;
   errorMsg!: string;
 
   constructor(private readonly cd: ChangeDetectorRef,
-    private readonly popupHandler: PopupHandler) { }
+    private readonly popupHandler: PopupHandler,
+    private readonly projectService: ProjectService) { }
 
   ngOnInit(): void {
     this.popupHandler.projectEntry().subscribe((project: ProjectModel) => {
@@ -37,18 +42,45 @@ export class ProjectEntryComponent implements OnInit {
     } else if (this.formData.DETAILS === '') {
       this.errorMsg = 'Please enter Details';
     } else {
-      this.onClose();
+      switch (this.legend) {
+        case 'Add':
+          this.projectService.add(this.formData).subscribe({
+            next: () => this.onHttpSuccess(),
+            error: (httpError: HttpErrorResponse) => this.onHttpError(httpError)
+          });
+          break;
+        case 'Edit':
+          this.projectService.update(this.formData).subscribe({
+            next: () => this.onHttpSuccess(),
+            error: (httpError: HttpErrorResponse) => this.onHttpError(httpError)
+          });
+          break;
+        default:
+          break;
+      }
     }
     this.cd.markForCheck();
   }
 
-  onClose() {
+  onCloseDialog() {
     this.formData = { ID_PROJECT: 0, NAME: '', DETAILS: '', CREATED_ON: new Date() };
     this.legend = '';
     this.errorMsg = '';
     this.entryForm.reset();
     this.showComponentFlag = false;
     this.cd.markForCheck();
+  }
+
+  onHttpSuccess() {
+    this.onCloseDialog();
+    this.onClose.emit(true);
+  }
+
+  onHttpError(httpError: HttpErrorResponse) {
+    const errorModel = httpError.error as ErrorModel;
+    this.errorMsg = errorModel.ERROR_MSG;
+    this.onCloseDialog();
+    this.onClose.emit(false);
   }
 
 }

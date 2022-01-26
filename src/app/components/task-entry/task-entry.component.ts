@@ -1,8 +1,11 @@
+import { ErrorModel } from './../../models/error.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { TaskService } from './../../services/task.service';
 import { objectifyProjectModel, objectifyUserModel, stringifyProjectModel, stringifyUserModel } from '../../shared/app-functions';
 import { UserModel } from './../../models/user.model';
 import { PopupHandler } from './../../shared/popup-handler';
 import { NgForm } from '@angular/forms';
-import { Component, OnInit, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
 import { TaskModel } from '../..//models/task.model';
 import { ProjectModel } from '../../models/project.model';
 
@@ -15,6 +18,7 @@ export class TaskEntryComponent implements OnInit {
   @ViewChild('entryForm') entryForm!: NgForm;
   @Input() userList: UserModel[] = [];
   @Input() projectList: ProjectModel[] = [];
+  @Output() onClose = new EventEmitter();
 
   projectSelectList: string[] = [];
   projectSelected!: string;
@@ -34,7 +38,8 @@ export class TaskEntryComponent implements OnInit {
   errorMsg!: string;
 
   constructor(private readonly cd: ChangeDetectorRef,
-    private readonly popupHandler: PopupHandler) { }
+    private readonly popupHandler: PopupHandler,
+    private readonly taskService: TaskService) { }
 
   ngOnInit(): void {
     this.popupHandler.taskEntry().subscribe((task: TaskModel) => {
@@ -66,12 +71,27 @@ export class TaskEntryComponent implements OnInit {
     } else if (this.formData.USER.ID_USER === 0) {
       this.errorMsg = 'Please enter User Details';
     } else {
-      this.onClose();
+      switch (this.legend) {
+        case 'Add':
+          this.taskService.add(this.formData).subscribe({
+            next: () => this.onHttpSuccess(),
+            error: (httpError: HttpErrorResponse) => this.onHttpError(httpError)
+          });
+          break;
+        case 'Edit':
+          this.taskService.update(this.formData).subscribe({
+            next: () => this.onHttpSuccess(),
+            error: (httpError: HttpErrorResponse) => this.onHttpError(httpError)
+          });
+          break;
+        default:
+          break;
+      }
     }
     this.cd.markForCheck();
   }
 
-  onClose() {
+  onCloseDialog() {
     this.formData = {
       ID_TASK: 0, DETAILS: '', CREATED_ON: new Date(), STATUS: 'New', ID_PROJECT: 0, ID_USER: 0,
       PROJECT: { ID_PROJECT: 0, NAME: '', DETAILS: '', CREATED_ON: new Date() }, USER: { ID_USER: 0, EMAIL: '', FIRST_NAME: '', LAST_NAME: '' }
@@ -107,6 +127,18 @@ export class TaskEntryComponent implements OnInit {
   onStatusSelect() {
     this.formData.STATUS = this.statusSelected;
     this.cd.markForCheck();
+  }
+
+  onHttpSuccess() {
+    this.onCloseDialog();
+    this.onClose.emit(true);
+  }
+
+  onHttpError(httpError: HttpErrorResponse) {
+    const errorModel = httpError.error as ErrorModel;
+    this.errorMsg = errorModel.ERROR_MSG;
+    this.onCloseDialog();
+    this.onClose.emit(false);
   }
 
 }

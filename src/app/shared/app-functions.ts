@@ -1,8 +1,14 @@
 import { UserModel } from './../models/user.model';
 import { ProjectModel } from './../models/project.model';
 
+export function stringifyDate(dt: Date) {
+    const date = new Date(dt);
+    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    return `${date.getDate()}-${months[date.getMonth()]}-${date.getFullYear()}`;
+}
+
 export function stringifyProjectModel(project: ProjectModel) {
-    return `${project.ID_PROJECT} | ${project.NAME} | ${project.DETAILS} | ${project.CREATED_ON.toDateString()}`;
+    return `${project.ID_PROJECT} | ${project.NAME} | ${project.DETAILS} | ${stringifyDate(project.CREATED_ON)}`;
 }
 
 export function stringifyUserModel(user: UserModel) {

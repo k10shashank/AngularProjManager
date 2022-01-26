@@ -6,4 +6,4 @@
         [columnDefs]="gridColDefs"></ag-grid-angular>
 </div>
 
-<app-user-entry></app-user-entry>
+<app-user-entry (onClose)="onDialogClose($event)"></app-user-entry>
